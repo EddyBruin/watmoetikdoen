@@ -42,7 +42,7 @@
     .topbar {
       background: var(--dark);
       color: #fff;
-      padding: 18px 32px;
+      padding: 16px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -53,7 +53,7 @@
 
     .topbar-title {
       font-family: 'Syne', sans-serif;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 800;
       letter-spacing: -0.5px;
     }
@@ -64,9 +64,9 @@
       background: rgba(255,255,255,0.1);
       color: #fff;
       border: 1px solid rgba(255,255,255,0.2);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 13px;
+      padding: 5px 12px;
+      border-radius: 16px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
@@ -79,16 +79,16 @@
 
     /* Main layout */
     .container {
-      max-width: 900px; /* Iets smaller voor een persoonlijk overzicht */
+      max-width: 800px; 
       margin: 0 auto;
-      padding: 40px 24px 80px;
+      padding: 32px 16px 80px;
     }
 
     /* Controls (Selection Screen) */
     .controls {
       background: var(--card);
       border-radius: 20px;
-      padding: 32px 32px;
+      padding: 32px 24px;
       border: 1px solid var(--border);
       margin-bottom: 24px;
       box-shadow: 0 2px 12px rgba(0,0,0,0.04);
@@ -115,10 +115,10 @@
 
     .btn {
       font-family: 'DM Sans', sans-serif;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
-      padding: 12px 24px;
-      border-radius: 12px;
+      padding: 10px 20px;
+      border-radius: 10px;
       border: 2px solid var(--border);
       background: var(--bg);
       color: var(--dark);
@@ -135,17 +135,17 @@
       align-items: center;
       text-align: center;
       margin-bottom: 24px;
-      gap: 8px;
+      gap: 6px;
     }
 
     .results-title {
       font-family: 'Syne', sans-serif;
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 800;
     }
 
     .results-meta {
-      font-size: 15px;
+      font-size: 14px;
       color: var(--mid);
       font-weight: 500;
     }
@@ -153,54 +153,54 @@
     /* Statistieken Sectie (Groep Info) */
     .stats-panel {
       display: flex;
-      gap: 20px;
-      margin-bottom: 32px;
+      gap: 16px;
+      margin-bottom: 24px;
       flex-wrap: wrap;
     }
 
     .stat-card {
       background: var(--card);
-      border-radius: 20px;
-      padding: 24px 32px;
+      border-radius: 16px;
+      padding: 20px 24px;
       border: 1px solid var(--border);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
       flex: 1;
-      min-width: 300px;
+      min-width: 280px;
     }
 
     .stat-title {
       font-family: 'Syne', sans-serif;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--mid);
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     /* Accordeons / Dagen */
     .days-list {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
     }
 
     .group-card {
       background: var(--card);
-      border-radius: 16px;
+      border-radius: 12px;
       border: 1px solid var(--border);
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
       transition: border-color 0.3s;
     }
 
     .group-card.highlight-day {
       border: 2px solid var(--accent);
-      box-shadow: 0 4px 16px rgba(232, 68, 10, 0.15);
+      box-shadow: 0 4px 12px rgba(232, 68, 10, 0.12);
     }
 
     .group-header {
-      padding: 16px 20px;
+      padding: 14px 16px;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -210,77 +210,97 @@
       transition: background 0.2s;
     }
     
-    .group-header:hover {
-      background: #FFFFFF;
-    }
-
-    .highlight-day .group-header {
-      background: #FFF9F7;
-    }
+    .group-header:hover { background: #FFFFFF; }
+    .highlight-day .group-header { background: #FFF9F7; }
 
     .group-name {
       font-family: 'Syne', sans-serif;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .group-size {
-      background: var(--bg);
-      border-radius: 20px;
-      padding: 4px 12px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--mid);
     }
 
     .group-body {
-      padding: 0;
+      padding: 8px 0 16px 0;
       display: none;
     }
 
-    .list-section-header {
-      padding: 12px 20px;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      border-top: 1px solid var(--border);
-      font-family: 'Syne', sans-serif;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--mid);
-    }
-    
-    .list-section-header:first-child {
-      border-top: none;
+    /* Compacter & Subtieler Design per Sectie */
+    .sectie-blok {
+      margin: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      overflow: hidden;
     }
 
+    .sectie-header {
+      padding: 6px 12px;
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--mid);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sectie-diensten { background: #FAFAF8; }
+    .sectie-corvee { background: #FFFCF7; border-color: #F8EAD9; }
+    .sectie-corvee .sectie-header { background: #FDF3E6; border-bottom-color: #F8EAD9; }
+    .sectie-spellen { background: #F8FBFF; border-color: #E6F0FA; }
+    .sectie-spellen .sectie-header { background: #EFF5FC; border-bottom-color: #E6F0FA; }
+
+    /* Grid layout voor Diensten */
+    .diensten-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 10px 12px;
+    }
+    .dienst-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .dienst-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--mid);
+      letter-spacing: 0.5px;
+    }
+
+    /* Rijen binnen blokken */
     .kind-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border);
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
       gap: 12px;
-      background: #FFF;
     }
 
     .kind-row:last-child { border-bottom: none; }
 
     .kind-naam {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
     }
     
     .sub-text {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--mid);
       font-weight: 500;
     }
@@ -288,43 +308,51 @@
     .kind-meta {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
       justify-content: flex-end;
     }
 
     /* Badges */
     .tag {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 6px;
       background: var(--bg);
       color: var(--mid);
     }
+    
+    /* Dynamische Groepskleuren */
+    .tag-blauw { background: rgba(45, 107, 228, 0.12); color: var(--groep-blauw); }
+    .tag-rood { background: rgba(232, 68, 10, 0.12); color: var(--groep-rood); }
+    .tag-geel { background: rgba(212, 160, 23, 0.15); color: var(--groep-geel); }
+    .tag-oranje { background: rgba(234, 88, 12, 0.12); color: var(--groep-oranje); }
+    .tag-groen { background: rgba(26, 158, 92, 0.12); color: var(--groep-groen); }
 
     .post-badge {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--accent2);
       background: var(--tag-m);
-      padding: 4px 10px;
-      border-radius: 8px;
+      padding: 3px 8px;
+      border-radius: 6px;
       white-space: nowrap;
     }
     
     .badge-groen { background: #E6F5ED; color: var(--green); }
     .badge-roze { background: var(--tag-f); color: var(--tag-f-text); }
     .badge-oranje { background: #FFF0EB; color: var(--accent); }
+    .badge-grijs { background: #F0F0F0; color: #999; }
 
     .ronde-badge {
       font-family: 'Syne', sans-serif;
       font-weight: 800;
-      font-size: 12px;
+      font-size: 11px;
       background: var(--accent);
       color: #fff;
-      padding: 4px 10px;
-      border-radius: 8px;
+      padding: 3px 8px;
+      border-radius: 6px;
       white-space: nowrap;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -335,14 +363,21 @@
     }
     .ronde-badge.dagdeel {
       background: var(--dark);
-      font-size: 11px;
+      font-size: 10px;
     }
 
-    @media (max-width: 600px) {
-      .topbar { padding: 14px 20px; }
-      .container { padding: 24px 16px 60px; }
+    .leeg-state {
+      padding: 24px;
+      text-align: center;
+      font-style: italic;
+      color: var(--mid);
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    @media (max-width: 500px) {
       .kind-row { flex-direction: column; align-items: flex-start; }
-      .kind-meta { width: 100%; justify-content: flex-start; margin-top: 8px; }
+      .kind-meta { width: 100%; justify-content: flex-start; margin-top: 6px; }
     }
   </style>
 </head>
@@ -357,7 +392,7 @@
 
   <div id="selectionScreen" class="controls">
     <div class="controls-title">Draaiboek Tool</div>
-    <h2 class="results-title" style="margin-bottom: 8px;">Welke leider ben je?</h2>
+    <h2 class="results-title" style="margin-bottom: 6px;">Welke leider ben je?</h2>
     <p class="results-meta">Selecteer je naam om je persoonlijke rooster te bekijken.</p>
     <div class="btn-group" id="leaderGrid">
       </div>
@@ -607,13 +642,13 @@
           const andereLeiders = mijnGroep.leiders.filter(l => !matchesLeader(leider, [l]));
           card.innerHTML = `
               <div class="stat-title">Jouw Bonte Avond Groep</div>
-              <div style="font-family:'Syne', sans-serif; font-size: 20px; font-weight: 800; color: ${mijnGroep.cssVar}; margin-bottom: 12px;">
+              <div style="font-family:'Syne', sans-serif; font-size: 18px; font-weight: 800; color: ${mijnGroep.cssVar}; margin-bottom: 8px;">
                   Groep ${mijnGroep.kleur}
               </div>
-              <div style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">
+              <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px;">
                   Samen met: <span style="color:var(--mid);">${andereLeiders.join(', ') || '-'}</span>
               </div>
-              <div style="font-size: 13px; color: var(--mid); line-height: 1.6;">
+              <div style="font-size: 12px; color: var(--mid); line-height: 1.5;">
                   <strong>Kinderen (${mijnGroep.kids.length}):</strong><br>
                   ${mijnGroep.kids.join(' • ')}
               </div>
@@ -621,10 +656,10 @@
       } else {
           card.innerHTML = `
               <div class="stat-title">Bonte Avond Groep</div>
-              <div style="font-family:'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--dark); margin-bottom: 8px;">
+              <div style="font-family:'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--dark); margin-bottom: 8px;">
                   Geen vaste groep
               </div>
-              <div style="font-size: 14px; color: var(--mid);">
+              <div style="font-size: 13px; color: var(--mid);">
                   Jij bent ingedeeld als Hoofdleiding, EHBO of Kookstaf.
               </div>
           `;
@@ -641,42 +676,35 @@
           const isToday = (dag.date === todayStr);
 
           // -- Data Verzamelen --
-          
-          // Diensten
           const heeftTafel = matchesLeader(leider, dag.tafeldienst);
           const heeftNacht = matchesLeader(leider, dag.nachtdienst);
 
-          // Corvee
           const mijnCorvees = [];
           dag.corvee.forEach(c => {
               const mijnGroep = c.groepen.find(g => matchesLeader(leider, g.wie) || g.wie.includes('ALLEN'));
               if (mijnGroep) {
                   mijnCorvees.push({
-                      type: c.type,
-                      taak: c.taak,
-                      kleur: mijnGroep.kleur,
+                      type: c.type, taak: c.taak, kleur: mijnGroep.kleur,
                       samenMet: mijnGroep.wie.filter(p => !matchesLeader(leider, [p]) && p !== 'ALLEN')
                   });
               }
           });
 
-          // Spellen
           const mijnSpellen = [];
           dag.spellen.forEach(spel => {
               const mijnRolMatch = spel.rollen.find(r => matchesLeader(leider, r.wie) || r.wie.includes('ALLEN'));
               if (mijnRolMatch) {
                   mijnSpellen.push({ 
-                      naam: spel.naam, 
-                      dagdeel: spel.dagdeel, 
-                      rol: mijnRolMatch.rol, 
+                      naam: spel.naam, dagdeel: spel.dagdeel, rol: mijnRolMatch.rol, 
                       samenMet: mijnRolMatch.wie.filter(p => !matchesLeader(leider, [p]) && p !== 'ALLEN') 
                   });
               }
           });
 
+          // Check of leider HELEMAAL NIKS hoeft te doen vandaag
+          const isHelemaalLeeg = !heeftTafel && !heeftNacht && mijnCorvees.length === 0 && mijnSpellen.length === 0;
 
           // -- HTML Opbouwen --
-          
           const card = document.createElement('div');
           card.className = `group-card ${isToday ? 'highlight-day' : ''}`;
           
@@ -691,64 +719,70 @@
               <div class="group-body" id="content-${index}" style="display: ${isToday ? 'block' : 'none'};">
           `;
 
-          // 1. Algemene Diensten
-          html += `<div class="list-section-header">Diensten</div>`;
-          html += `
-              <div class="kind-row">
-                  <div class="kind-naam">Tafeldienst</div>
-                  <div class="kind-meta">${heeftTafel ? '<span class="post-badge badge-groen">JA</span>' : '<span class="tag">NEE</span>'}</div>
-              </div>
-              <div class="kind-row">
-                  <div class="kind-naam">Nachtdienst</div>
-                  <div class="kind-meta">${heeftNacht ? '<span class="post-badge badge-roze">JA</span>' : '<span class="tag">NEE</span>'}</div>
-              </div>
-          `;
-
-          // 2. Corvee
-          html += `<div class="list-section-header">Corveerooster</div>`;
-          if (mijnCorvees.length > 0) {
-              mijnCorvees.forEach(c => {
-                  let partners = c.samenMet.length > 0 ? `Met: ${c.samenMet.join(', ')}` : 'Samen met de rest';
-                  let badgeKleur = c.kleur && c.kleur !== '-' ? `<span class="tag">${c.kleur}</span>` : '';
-                  
-                  html += `
-                  <div class="kind-row">
-                      <div class="kind-naam">
-                          ${c.taak}
-                          <div class="sub-text">${partners}</div>
-                      </div>
-                      <div class="kind-meta">
-                          <span class="ronde-badge dagdeel">${c.type}</span>
-                          ${badgeKleur}
-                      </div>
-                  </div>`;
-              });
+          if (isHelemaalLeeg) {
+              html += `<div class="leeg-state">Je moet helemaal niks!</div>`;
           } else {
-              html += `<div class="kind-row"><div class="kind-naam sub-text" style="font-style:italic;">Geen corvee vandaag.</div></div>`;
-          }
+              
+              // 1. Algemene Diensten (Nieuwe Grid Stijl)
+              html += `
+              <div class="sectie-blok sectie-diensten">
+                  <div class="diensten-grid">
+                      <div class="dienst-item">
+                          <span class="dienst-label">Tafeldienst</span>
+                          <div>${heeftTafel ? '<span class="post-badge badge-groen">JA</span>' : '<span class="tag badge-grijs">NEE</span>'}</div>
+                      </div>
+                      <div class="dienst-item">
+                          <span class="dienst-label">Nachtdienst</span>
+                          <div>${heeftNacht ? '<span class="post-badge badge-roze">JA</span>' : '<span class="tag badge-grijs">NEE</span>'}</div>
+                      </div>
+                  </div>
+              </div>`;
 
-          // 3. Spellen
-          html += `<div class="list-section-header">Spel Begeleiding & Rollen</div>`;
-          if (mijnSpellen.length > 0) {
-              mijnSpellen.forEach(s => {
-                  let partners = s.samenMet.length > 0 ? `Samen met: ${s.samenMet.join(', ')}` : 'Zelfstandig / Allen';
-                  let isActeur = s.rol.toLowerCase().includes('acteur') || s.rol.toLowerCase().includes('outfit');
-                  let rolBadge = isActeur ? 'badge-roze' : 'badge-oranje';
-                  
-                  html += `
-                  <div class="kind-row">
-                      <div class="kind-naam">
-                          ${s.naam}
-                          <div class="sub-text">${partners}</div>
-                      </div>
-                      <div class="kind-meta">
-                          <span class="post-badge ${rolBadge}">${s.rol}</span>
-                          <span class="ronde-badge dagdeel">${s.dagdeel}</span>
-                      </div>
-                  </div>`;
-              });
-          } else {
-              html += `<div class="kind-row"><div class="kind-naam sub-text" style="font-style:italic;">Geen rol toegewezen.</div></div>`;
+              // 2. Corvee
+              if (mijnCorvees.length > 0) {
+                  html += `<div class="sectie-blok sectie-corvee"><div class="sectie-header">Corveerooster</div>`;
+                  mijnCorvees.forEach(c => {
+                      let partners = c.samenMet.length > 0 ? `Met: ${c.samenMet.join(', ')}` : 'Samen met de rest';
+                      let tagKleurKlasse = c.kleur && c.kleur !== '-' && c.kleur !== 'Allemaal' ? `tag-${c.kleur.toLowerCase()}` : '';
+                      let badgeKleur = c.kleur && c.kleur !== '-' ? `<span class="tag ${tagKleurKlasse}">${c.kleur}</span>` : '';
+                      
+                      html += `
+                      <div class="kind-row">
+                          <div class="kind-naam">
+                              ${c.taak}
+                              <div class="sub-text">${partners}</div>
+                          </div>
+                          <div class="kind-meta">
+                              <span class="ronde-badge dagdeel">${c.type}</span>
+                              ${badgeKleur}
+                          </div>
+                      </div>`;
+                  });
+                  html += `</div>`;
+              }
+
+              // 3. Spellen
+              if (mijnSpellen.length > 0) {
+                  html += `<div class="sectie-blok sectie-spellen"><div class="sectie-header">Spel Begeleiding & Rollen</div>`;
+                  mijnSpellen.forEach(s => {
+                      let partners = s.samenMet.length > 0 ? `Samen met: ${s.samenMet.join(', ')}` : 'Zelfstandig / Allen';
+                      let isActeur = s.rol.toLowerCase().includes('acteur') || s.rol.toLowerCase().includes('outfit');
+                      let rolBadge = isActeur ? 'badge-roze' : 'badge-oranje';
+                      
+                      html += `
+                      <div class="kind-row">
+                          <div class="kind-naam">
+                              ${s.naam}
+                              <div class="sub-text">${partners}</div>
+                          </div>
+                          <div class="kind-meta">
+                              <span class="post-badge ${rolBadge}">${s.rol}</span>
+                              <span class="ronde-badge dagdeel">${s.dagdeel}</span>
+                          </div>
+                      </div>`;
+                  });
+                  html += `</div>`;
+              }
           }
 
           html += `</div>`; // Sluit group-body
