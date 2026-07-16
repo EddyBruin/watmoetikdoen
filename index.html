@@ -311,6 +311,22 @@
       flex-wrap: wrap;
       justify-content: flex-end;
     }
+    
+    /* Layout voor de badges links van de tekst */
+    .row-content-wrapper {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .badge-kolom {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 65px;
+      padding-top: 2px;
+    }
 
     /* Badges */
     .tag {
@@ -355,11 +371,11 @@
       white-space: nowrap;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      text-align: center;
     }
     
-    .ronde-badge.vandaag {
-      background: var(--accent);
-    }
+    .ronde-badge.vandaag { background: var(--accent); }
+    
     .ronde-badge.dagdeel {
       background: var(--dark);
       font-size: 10px;
@@ -376,7 +392,7 @@
 
     @media (max-width: 500px) {
       .kind-row { flex-direction: column; align-items: flex-start; }
-      .kind-meta { width: 100%; justify-content: flex-start; margin-top: 6px; }
+      .kind-meta { width: 100%; justify-content: flex-start; margin-top: 6px; padding-left: 77px; }
     }
   </style>
 </head>
@@ -389,32 +405,25 @@
 
 <div class="container">
 
-  <!-- SELECTIE SCHERM -->
   <div id="selectionScreen" class="controls">
     <div class="controls-title">Draaiboek Tool</div>
     <h2 class="results-title" style="margin-bottom: 6px;">Welke leider ben je?</h2>
     <p class="results-meta">Selecteer je naam om je persoonlijke rooster te bekijken.</p>
     <div class="btn-group" id="leaderGrid">
-      <!-- Knoppen worden door JS gegenereerd -->
-    </div>
+      </div>
   </div>
 
-  <!-- DAG OVERZICHT SCHERM -->
   <div id="dayScreen" style="display: none;">
     <div class="results-header">
       <div class="results-title" id="welcomeText">Hallo!</div>
       <div class="results-meta">Klik op een dag om je taken en spellen te bekijken.</div>
     </div>
 
-    <!-- Groepsindeling (Bonte Avond) -->
     <div class="stats-panel" id="groupSection">
-      <!-- Wordt gevuld door JS -->
-    </div>
+      </div>
 
-    <!-- Dagen Lijst -->
     <div class="days-list" id="daysList">
-      <!-- Accordions worden door JS gegenereerd -->
-    </div>
+      </div>
   </div>
 
 </div>
@@ -524,7 +533,7 @@
               { type: "Avond", taak: "Keuken Eetzaal Sanitair", groepen: [{ wie: ["Daphne", "Dion"], kleur: "Rood" }, { wie: ["Eddy", "Ed", "Thomas"], kleur: "Groen" }] }
           ],
           tafeldienst: ["Yorick"],
-          nachtdienst: ["Yorick", "Dion", "Ticho", "Olaf", "Lotte", "Bjomi"],
+          nachtdienst: ["Yorick", "Dion", "Ticho", "Olaf", "Kylie", "Daphne"],
           spellen: [
               { naam: "Zwemmen", dagdeel: "Middag", rollen: [{ wie: ["ALLEN"], rol: "Actief chillen" }] },
               { naam: "Murder @ the casino", dagdeel: "Avond", rollen: [{ wie: ["Bjomi", "Ticho"], rol: "Spelbegeleider (Casino kleding)" }] }
@@ -762,12 +771,16 @@
                       
                       html += `
                       <div class="kind-row">
-                          <div class="kind-naam">
-                              ${c.taak}
-                              <div class="sub-text">${partners}</div>
+                          <div class="row-content-wrapper">
+                              <div class="badge-kolom">
+                                  <span class="ronde-badge dagdeel">${c.type}</span>
+                              </div>
+                              <div class="kind-naam">
+                                  ${c.taak}
+                                  <div class="sub-text">${partners}</div>
+                              </div>
                           </div>
                           <div class="kind-meta">
-                              <span class="ronde-badge dagdeel">${c.type}</span>
                               ${badgeKleur}
                           </div>
                       </div>`;
@@ -785,12 +798,16 @@
                       
                       html += `
                       <div class="kind-row">
-                          <div class="kind-naam">
-                              ${s.naam}
-                              <div class="sub-text">${partners}</div>
+                          <div class="row-content-wrapper">
+                              <div class="badge-kolom">
+                                  <span class="ronde-badge dagdeel">${s.dagdeel}</span>
+                              </div>
+                              <div class="kind-naam">
+                                  ${s.naam}
+                                  <div class="sub-text">${partners}</div>
+                              </div>
                           </div>
                           <div class="kind-meta">
-                              <span class="ronde-badge dagdeel">${s.dagdeel}</span>
                               <span class="post-badge ${rolBadge}">${s.rol}</span>
                           </div>
                       </div>`;
