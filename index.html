@@ -358,7 +358,6 @@
     .badge-groen { background: #E6F5ED; color: var(--green); }
     .badge-roze { background: var(--tag-f); color: var(--tag-f-text); }
     .badge-oranje { background: #FFF0EB; color: var(--accent); }
-    .badge-grijs { background: #F0F0F0; color: #999; }
 
     .ronde-badge {
       font-family: 'Syne', sans-serif;
@@ -405,25 +404,32 @@
 
 <div class="container">
 
+  <!-- SELECTIE SCHERM -->
   <div id="selectionScreen" class="controls">
     <div class="controls-title">Draaiboek Tool</div>
     <h2 class="results-title" style="margin-bottom: 6px;">Welke leider ben je?</h2>
     <p class="results-meta">Selecteer je naam om je persoonlijke rooster te bekijken.</p>
     <div class="btn-group" id="leaderGrid">
-      </div>
+      <!-- Knoppen worden door JS gegenereerd -->
+    </div>
   </div>
 
+  <!-- DAG OVERZICHT SCHERM -->
   <div id="dayScreen" style="display: none;">
     <div class="results-header">
       <div class="results-title" id="welcomeText">Hallo!</div>
       <div class="results-meta">Klik op een dag om je taken en spellen te bekijken.</div>
     </div>
 
+    <!-- Groepsindeling (Bonte Avond) -->
     <div class="stats-panel" id="groupSection">
-      </div>
+      <!-- Wordt gevuld door JS -->
+    </div>
 
+    <!-- Dagen Lijst -->
     <div class="days-list" id="daysList">
-      </div>
+      <!-- Accordions worden door JS gegenereerd -->
+    </div>
   </div>
 
 </div>
@@ -446,13 +452,13 @@
       { kleur: "Groen", cssVar: "var(--groep-groen)", leiders: ["Bastiaan", "Bas", "Wessel", "Kylie"], kids: ["Celeste", "Jonah", "Laura", "Luc", "Noëlle N.", "Semme", "Yasmine"] }
   ];
 
-  // Data: Schema
+  // Data: Volledig herzien schema inclusief de nieuwe Corvee structuur
   const schema = [
       {
           date: "2026-07-18",
           name: "Zaterdag 18 juli (Aankomst)",
           corvee: [
-              { type: "Avond", taak: "Keuken Eetzaal Sanitair", groepen: [{ wie: ["Yorick", "Lotte"], kleur: "Blauw" }, { wie: ["Daphne", "Dion"], kleur: "Oranje" }] }
+              { type: "Avond", taak: "Keuken, Eetzaal, Sanitair", leiding: ["Yorick", "Lotte", "Daphne", "Dion"], kids: ["Blauw", "Oranje"] }
           ],
           tafeldienst: ["Daphne"],
           nachtdienst: ["Bastiaan", "Bas", "Yorick", "Yoni", "Lotte", "Mirjam", "Daphne"],
@@ -466,9 +472,9 @@
           date: "2026-07-19",
           name: "Zondag 19 juli",
           corvee: [
-              { type: "Ochtend", taak: "Sanitair Eetzaal", groepen: [{ wie: ["Daphne", "Dion"], kleur: "Groen" }] },
-              { type: "Middag", taak: "Keuken Eetzaal", groepen: [{ wie: ["Seline", "Ticho"], kleur: "Oranje" }] },
-              { type: "Avond", taak: "Keuken Eetzaal Sanitair Slaapzalen", groepen: [{ wie: ["Bastiaan", "Bas", "Wessel", "Kylie"], kleur: "Geel" }, { wie: ["Bjomi", "Yoni"], kleur: "Rood" }] }
+              { type: "Ochtend", taak: "Sanitair, Eetzaal", leiding: ["Daphne", "Dion"], kids: ["Groen"] },
+              { type: "Middag", taak: "Keuken, Eetzaal", leiding: ["Seline", "Ticho"], kids: ["Oranje"] },
+              { type: "Avond", taak: "Keuken, Eetzaal, Sanitair, Slaapzalen", leiding: ["Bas", "Bastiaan", "Wessel", "Kylie", "Bjomi", "Yoni"], kids: ["Geel", "Rood"] }
           ],
           tafeldienst: ["Eddy", "Ed"],
           nachtdienst: ["Ticho", "Wessel", "Eddy", "Ed", "Thomas", "Kylie", "Seline"],
@@ -496,9 +502,9 @@
           date: "2026-07-20",
           name: "Maandag 20 juli",
           corvee: [
-              { type: "Ochtend", taak: "Sanitair Eetzaal", groepen: [{ wie: ["Bjomi", "Yoni"], kleur: "-" }] },
-              { type: "Middag", taak: "Keuken Eetzaal", groepen: [{ wie: ["Daphne", "Dion"], kleur: "Geel" }] },
-              { type: "Avond", taak: "Keuken Eetzaal Sanitair", groepen: [{ wie: ["Seline", "Ticho"], kleur: "Groen" }, { wie: ["Yorick", "Lotte"], kleur: "Blauw" }] }
+              { type: "Ochtend", taak: "Sanitair, Eetzaal", leiding: ["Bjomi", "Yoni"], kids: [] },
+              { type: "Middag", taak: "Keuken, Eetzaal", leiding: ["Daphne", "Dion"], kids: ["Geel"] },
+              { type: "Avond", taak: "Keuken, Eetzaal, Sanitair", leiding: ["Seline", "Ticho", "Yorick", "Lotte"], kids: ["Groen", "Blauw"] }
           ],
           tafeldienst: ["Olaf"],
           nachtdienst: ["Yoni", "Isa", "Olaf"],
@@ -513,9 +519,9 @@
           date: "2026-07-21",
           name: "Dinsdag 21 juli",
           corvee: [
-              { type: "Ochtend", taak: "Eetzaal", groepen: [{ wie: ["Seline", "Ticho"], kleur: "-" }] },
-              { type: "Middag", taak: "Keuken Eetzaal", groepen: [{ wie: ["Yorick", "Lotte"], kleur: "Blauw" }] },
-              { type: "Avond", taak: "Keuken Eetzaal Sanitair Slaapzalen", groepen: [{ wie: ["Eddy", "Ed", "Thomas"], kleur: "Oranje" }, { wie: ["Bastiaan", "Bas", "Wessel", "Kylie"], kleur: "Geel" }] }
+              { type: "Ochtend", taak: "Eetzaal", leiding: ["Seline", "Ticho"], kids: [] },
+              { type: "Middag", taak: "Keuken, Eetzaal", leiding: ["Yorick", "Lotte"], kids: ["Blauw"] },
+              { type: "Avond", taak: "Keuken, Eetzaal, Sanitair, Slaapzalen", leiding: ["Eddy", "Ed", "Thomas", "Bas", "Bastiaan", "Wessel", "Kylie"], kids: ["Oranje", "Geel"] }
           ],
           tafeldienst: ["Lotte"],
           nachtdienst: [],
@@ -529,8 +535,8 @@
           date: "2026-07-22",
           name: "Woensdag 22 juli",
           corvee: [
-              { type: "Middag", taak: "Groot Corvee", groepen: [{ wie: ["ALLEN"], kleur: "Allemaal" }] },
-              { type: "Avond", taak: "Keuken Eetzaal Sanitair", groepen: [{ wie: ["Daphne", "Dion"], kleur: "Rood" }, { wie: ["Eddy", "Ed", "Thomas"], kleur: "Groen" }] }
+              { type: "Middag", taak: "Groot corvee", leiding: ["ALLEN"], kids: [] },
+              { type: "Avond", taak: "Keuken, Eetzaal, Sanitair", leiding: ["Daphne", "Dion", "Eddy", "Ed", "Thomas"], kids: ["Rood", "Groen"] }
           ],
           tafeldienst: ["Yorick"],
           nachtdienst: ["Yorick", "Dion", "Ticho", "Olaf", "Kylie", "Daphne"],
@@ -543,9 +549,9 @@
           date: "2026-07-23",
           name: "Donderdag 23 juli",
           corvee: [
-              { type: "Ochtend", taak: "Sanitair Eetzaal", groepen: [{ wie: ["Eddy", "Ed", "Thomas"], kleur: "-" }] },
-              { type: "Middag", taak: "Keuken Eetzaal", groepen: [{ wie: ["Bastiaan", "Bas", "Wessel", "Kylie"], kleur: "Rood" }] },
-              { type: "Avond", taak: "Keuken Eetzaal Sanitair Slaapzalen", groepen: [{ wie: ["Bjomi", "Yoni"], kleur: "Blauw" }, { wie: ["Seline", "Ticho"], kleur: "Oranje" }] }
+              { type: "Ochtend", taak: "Sanitair, Eetzaal", leiding: ["Eddy", "Ed", "Thomas"], kids: [] },
+              { type: "Middag", taak: "Keuken, Eetzaal", leiding: ["Bas", "Bastiaan", "Wessel", "Kylie"], kids: ["Rood"] },
+              { type: "Avond", taak: "Keuken, Eetzaal, Sanitair, Slaapzalen", leiding: ["Bjomi", "Yoni", "Seline", "Ticho"], kids: ["Blauw", "Oranje"] }
           ],
           tafeldienst: ["Bjomi"],
           nachtdienst: ["Wessel", "Thomas", "Eddy", "Ed", "Bastiaan", "Bas", "Lotte", "Bjomi"],
@@ -565,9 +571,9 @@
           date: "2026-07-24",
           name: "Vrijdag 24 juli",
           corvee: [
-              { type: "Ochtend", taak: "Groot Corvee", groepen: [{ wie: ["ALLEN"], kleur: "Allemaal" }] },
-              { type: "Middag", taak: "Keuken Eetzaal", groepen: [{ wie: ["Eddy", "Ed", "Thomas"], kleur: "Groen" }] },
-              { type: "Avond", taak: "Keuken Eetzaal", groepen: [{ wie: ["Bastiaan", "Bas", "Wessel", "Kylie"], kleur: "Geel" }] }
+              { type: "Ochtend", taak: "Geen Corvee", leiding: ["16-jarigen"], kids: [] },
+              { type: "Middag", taak: "Keuken, Eetzaal", leiding: ["Eddy", "Ed", "Thomas", "Bjomi", "Yoni"], kids: ["Groen"] },
+              { type: "Avond", taak: "Keuken, Eetzaal", leiding: ["Bas", "Bastiaan", "Wessel", "Kylie"], kids: ["Geel", "Rood"] }
           ],
           tafeldienst: [],
           nachtdienst: [],
@@ -581,7 +587,7 @@
           date: "2026-07-25",
           name: "Zaterdag 25 juli (Vertrek)",
           corvee: [
-              { type: "Ochtend", taak: "Groot Corvee / Oplevering", groepen: [{ wie: ["ALLEN"], kleur: "Allemaal" }] }
+              { type: "Ochtend", taak: "Groot corvee / Oplevering", leiding: ["ALLEN"], kids: [] }
           ],
           tafeldienst: [],
           nachtdienst: [],
@@ -696,11 +702,13 @@
 
           const mijnCorvees = [];
           dag.corvee.forEach(c => {
-              const mijnGroep = c.groepen.find(g => matchesLeader(leider, g.wie) || g.wie.includes('ALLEN'));
-              if (mijnGroep) {
+              if (matchesLeader(leider, c.leiding) || c.leiding.includes('ALLEN')) {
+                  const partners = c.leiding.filter(p => !matchesLeader(leider, [p]) && p !== 'ALLEN');
                   mijnCorvees.push({
-                      type: c.type, taak: c.taak, kleur: mijnGroep.kleur,
-                      samenMet: mijnGroep.wie.filter(p => !matchesLeader(leider, [p]) && p !== 'ALLEN')
+                      type: c.type,
+                      taak: c.taak,
+                      samenMet: partners,
+                      kids: c.kids
                   });
               }
           });
@@ -738,7 +746,7 @@
               html += `<div class="leeg-state">Je moet helemaal niks!</div>`;
           } else {
               
-              // 1. Algemene Diensten (Nieuwe Grid Stijl - Alleen indien van toepassing)
+              // 1. Algemene Diensten 
               if (heeftTafel || heeftNacht) {
                   html += `<div class="sectie-blok sectie-diensten"><div class="diensten-grid">`;
                   
@@ -766,8 +774,7 @@
                   html += `<div class="sectie-blok sectie-corvee"><div class="sectie-header">Corveerooster</div>`;
                   mijnCorvees.forEach(c => {
                       let partners = c.samenMet.length > 0 ? `Met: ${c.samenMet.join(', ')}` : 'Samen met de rest';
-                      let tagKleurKlasse = c.kleur && c.kleur !== '-' && c.kleur !== 'Allemaal' ? `tag-${c.kleur.toLowerCase()}` : '';
-                      let badgeKleur = c.kleur && c.kleur !== '-' ? `<span class="tag ${tagKleurKlasse}">${c.kleur}</span>` : '';
+                      let kidsTags = c.kids.map(k => `<span class="tag tag-${k.toLowerCase()}">${k}</span>`).join(' ');
                       
                       html += `
                       <div class="kind-row">
@@ -781,7 +788,7 @@
                               </div>
                           </div>
                           <div class="kind-meta">
-                              ${badgeKleur}
+                              ${kidsTags}
                           </div>
                       </div>`;
                   });
