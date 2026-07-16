@@ -260,9 +260,8 @@
 
     /* Grid layout voor Diensten */
     .diensten-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      display: flex;
+      gap: 24px;
       padding: 10px 12px;
     }
     .dienst-item {
@@ -390,25 +389,32 @@
 
 <div class="container">
 
+  <!-- SELECTIE SCHERM -->
   <div id="selectionScreen" class="controls">
     <div class="controls-title">Draaiboek Tool</div>
     <h2 class="results-title" style="margin-bottom: 6px;">Welke leider ben je?</h2>
     <p class="results-meta">Selecteer je naam om je persoonlijke rooster te bekijken.</p>
     <div class="btn-group" id="leaderGrid">
-      </div>
+      <!-- Knoppen worden door JS gegenereerd -->
+    </div>
   </div>
 
+  <!-- DAG OVERZICHT SCHERM -->
   <div id="dayScreen" style="display: none;">
     <div class="results-header">
       <div class="results-title" id="welcomeText">Hallo!</div>
       <div class="results-meta">Klik op een dag om je taken en spellen te bekijken.</div>
     </div>
 
+    <!-- Groepsindeling (Bonte Avond) -->
     <div class="stats-panel" id="groupSection">
-      </div>
+      <!-- Wordt gevuld door JS -->
+    </div>
 
+    <!-- Dagen Lijst -->
     <div class="days-list" id="daysList">
-      </div>
+      <!-- Accordions worden door JS gegenereerd -->
+    </div>
   </div>
 
 </div>
@@ -723,20 +729,28 @@
               html += `<div class="leeg-state">Je moet helemaal niks!</div>`;
           } else {
               
-              // 1. Algemene Diensten (Nieuwe Grid Stijl)
-              html += `
-              <div class="sectie-blok sectie-diensten">
-                  <div class="diensten-grid">
+              // 1. Algemene Diensten (Nieuwe Grid Stijl - Alleen indien van toepassing)
+              if (heeftTafel || heeftNacht) {
+                  html += `<div class="sectie-blok sectie-diensten"><div class="diensten-grid">`;
+                  
+                  if (heeftTafel) {
+                      html += `
                       <div class="dienst-item">
                           <span class="dienst-label">Tafeldienst</span>
-                          <div>${heeftTafel ? '<span class="post-badge badge-groen">JA</span>' : '<span class="tag badge-grijs">NEE</span>'}</div>
-                      </div>
+                          <div><span class="post-badge badge-groen">JA</span></div>
+                      </div>`;
+                  }
+                  
+                  if (heeftNacht) {
+                      html += `
                       <div class="dienst-item">
                           <span class="dienst-label">Nachtdienst</span>
-                          <div>${heeftNacht ? '<span class="post-badge badge-roze">JA</span>' : '<span class="tag badge-grijs">NEE</span>'}</div>
-                      </div>
-                  </div>
-              </div>`;
+                          <div><span class="post-badge badge-roze">JA</span></div>
+                      </div>`;
+                  }
+                  
+                  html += `</div></div>`;
+              }
 
               // 2. Corvee
               if (mijnCorvees.length > 0) {
@@ -776,8 +790,8 @@
                               <div class="sub-text">${partners}</div>
                           </div>
                           <div class="kind-meta">
-                              <span class="post-badge ${rolBadge}">${s.rol}</span>
                               <span class="ronde-badge dagdeel">${s.dagdeel}</span>
+                              <span class="post-badge ${rolBadge}">${s.rol}</span>
                           </div>
                       </div>`;
                   });
