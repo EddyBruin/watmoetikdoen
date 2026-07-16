@@ -665,4 +665,115 @@
           dag.spellen.forEach(spel => {
               const mijnRolMatch = spel.rollen.find(r => matchesLeader(leider, r.wie) || r.wie.includes('ALLEN'));
               if (mijnRolMatch) {
-                  mijnSpellen.push({
+                  mijnSpellen.push({ 
+                      naam: spel.naam, 
+                      dagdeel: spel.dagdeel, 
+                      rol: mijnRolMatch.rol, 
+                      samenMet: mijnRolMatch.wie.filter(p => !matchesLeader(leider, [p]) && p !== 'ALLEN') 
+                  });
+              }
+          });
+
+
+          // -- HTML Opbouwen --
+          
+          const card = document.createElement('div');
+          card.className = `group-card ${isToday ? 'highlight-day' : ''}`;
+          
+          let todayBadge = isToday ? `<span class="ronde-badge vandaag" style="margin-left:8px;">VANDAAG</span>` : '';
+          let iconState = isToday ? '▲' : '▼';
+
+          let html = `
+              <div class="group-header" onclick="toggleAccordion(${index})">
+                  <div class="group-name">${dag.name} ${todayBadge}</div>
+                  <div class="group-size" id="icon-${index}">${iconState}</div>
+              </div>
+              <div class="group-body" id="content-${index}" style="display: ${isToday ? 'block' : 'none'};">
+          `;
+
+          // 1. Algemene Diensten
+          html += `<div class="list-section-header">Diensten</div>`;
+          html += `
+              <div class="kind-row">
+                  <div class="kind-naam">Tafeldienst</div>
+                  <div class="kind-meta">${heeftTafel ? '<span class="post-badge badge-groen">JA</span>' : '<span class="tag">NEE</span>'}</div>
+              </div>
+              <div class="kind-row">
+                  <div class="kind-naam">Nachtdienst</div>
+                  <div class="kind-meta">${heeftNacht ? '<span class="post-badge badge-roze">JA</span>' : '<span class="tag">NEE</span>'}</div>
+              </div>
+          `;
+
+          // 2. Corvee
+          html += `<div class="list-section-header">Corveerooster</div>`;
+          if (mijnCorvees.length > 0) {
+              mijnCorvees.forEach(c => {
+                  let partners = c.samenMet.length > 0 ? `Met: ${c.samenMet.join(', ')}` : 'Samen met de rest';
+                  let badgeKleur = c.kleur && c.kleur !== '-' ? `<span class="tag">${c.kleur}</span>` : '';
+                  
+                  html += `
+                  <div class="kind-row">
+                      <div class="kind-naam">
+                          ${c.taak}
+                          <div class="sub-text">${partners}</div>
+                      </div>
+                      <div class="kind-meta">
+                          <span class="ronde-badge dagdeel">${c.type}</span>
+                          ${badgeKleur}
+                      </div>
+                  </div>`;
+              });
+          } else {
+              html += `<div class="kind-row"><div class="kind-naam sub-text" style="font-style:italic;">Geen corvee vandaag.</div></div>`;
+          }
+
+          // 3. Spellen
+          html += `<div class="list-section-header">Spel Begeleiding & Rollen</div>`;
+          if (mijnSpellen.length > 0) {
+              mijnSpellen.forEach(s => {
+                  let partners = s.samenMet.length > 0 ? `Samen met: ${s.samenMet.join(', ')}` : 'Zelfstandig / Allen';
+                  let isActeur = s.rol.toLowerCase().includes('acteur') || s.rol.toLowerCase().includes('outfit');
+                  let rolBadge = isActeur ? 'badge-roze' : 'badge-oranje';
+                  
+                  html += `
+                  <div class="kind-row">
+                      <div class="kind-naam">
+                          ${s.naam}
+                          <div class="sub-text">${partners}</div>
+                      </div>
+                      <div class="kind-meta">
+                          <span class="post-badge ${rolBadge}">${s.rol}</span>
+                          <span class="ronde-badge dagdeel">${s.dagdeel}</span>
+                      </div>
+                  </div>`;
+              });
+          } else {
+              html += `<div class="kind-row"><div class="kind-naam sub-text" style="font-style:italic;">Geen rol toegewezen.</div></div>`;
+          }
+
+          html += `</div>`; // Sluit group-body
+          card.innerHTML = html;
+          daysList.appendChild(card);
+      });
+  }
+
+  // Accordeon bediening
+  window.toggleAccordion = function(index) {
+      const content = document.getElementById(`content-${index}`);
+      const icon = document.getElementById(`icon-${index}`);
+      
+      if (content.style.display === 'none' || content.style.display === '') {
+          content.style.display = 'block';
+          icon.textContent = '▲';
+      } else {
+          content.style.display = 'none';
+          icon.textContent = '▼';
+      }
+  };
+
+  // Start applicatie
+  initApp();
+</script>
+
+</body>
+</html>
