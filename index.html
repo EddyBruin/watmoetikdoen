@@ -435,6 +435,26 @@
       font-size: 14px;
     }
 
+    /* Textarea voor notities */
+    .note-textarea {
+      width: 100%;
+      min-height: 64px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--dark);
+      background: #FFFFFF;
+      resize: vertical;
+      transition: all 0.2s;
+    }
+    .note-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(232, 68, 10, 0.1);
+    }
+
     @media (max-width: 500px) {
       .kind-row { flex-direction: column; align-items: flex-start; }
       .kind-meta { width: 100%; justify-content: flex-start; margin-top: 6px; padding-left: 77px; }
@@ -493,7 +513,7 @@
   let currentLeader = null;
   let viewMode = 'personal'; // 'personal' of 'full'
 
-  // Data: Leiders[cite: 1]
+  // Data: Leiders
   const leiders = [
       "Bastiaan", "Bjomi", "Charlotte", "Daphne", "Dion", 
       "Eddy", "Isa", "Kylie", "Lotte", "Mirjam", 
@@ -501,7 +521,7 @@
       "Yoni", "Yorick"
   ];
 
-  // Data: Bonte avond groepen[cite: 1, 2]
+  // Data: Bonte avond groepen
   const groepen = [
       { kleur: "Blauw", cssVar: "var(--groep-blauw)", leiders: ["Dion", "Bjomi", "Yoni"], kids: ["Anne", "Jelina", "Jens", "Jordi", "Rosalie", "Saar", "Susanne"] },
       { kleur: "Rood", cssVar: "var(--groep-rood)", leiders: ["Daphne", "Eddy", "Ed", "Thomas"], kids: ["Ava", "Matthijs", "Mette", "Nick", "Ralph", "Renée", "Ramses", "Sam vd P."] },
@@ -510,7 +530,7 @@
       { kleur: "Groen", cssVar: "var(--groep-groen)", leiders: ["Bastiaan", "Bas", "Wessel", "Kylie"], kids: ["Celeste", "Jonah", "Laura", "Luc", "Noëlle N.", "Semme", "Yasmine"] }
   ];
 
-  // Data: Schema[cite: 1, 2]
+  // Data: Schema
   const schema = [
       {
           date: "2026-07-18",
@@ -653,6 +673,11 @@
       }
   ];
 
+  // Functie voor opslaan notitie
+  window.saveNote = function(leider, date, value) {
+      localStorage.setItem(`kamp2_note_${leider}_${date}`, value);
+  };
+
   // Helper match functie
   function matchesLeader(leaderName, list) {
       if (!list) return false;
@@ -696,7 +721,6 @@
   function setViewMode(mode) {
       viewMode = mode;
       
-      // Update knoppen styling
       if(mode === 'personal') {
           btnViewPersonal.classList.add('active');
           btnViewFull.classList.remove('active');
@@ -705,7 +729,6 @@
           btnViewPersonal.classList.remove('active');
       }
 
-      // Herteken het rooster
       if(currentLeader) {
           renderDays(currentLeader);
       }
@@ -721,7 +744,7 @@
       welcomeText.innerHTML = `Hallo <span style="color:var(--accent);">${leider}</span>!`;
       
       renderGroup(leider);
-      setViewMode('personal'); // Default naar personal view
+      setViewMode('personal'); 
   }
 
   // Terug naar selectie
@@ -777,6 +800,7 @@
 
       schema.forEach((dag, index) => {
           const isToday = (dag.date === todayStr);
+          const savedNote = localStorage.getItem(`kamp2_note_${leider}_${dag.date}`) || '';
 
           let html = '';
           let isHelemaalLeeg = false;
@@ -948,6 +972,16 @@
                   html += `</div>`;
               }
           }
+
+          // Persoonlijke Notities (Zichtbaar in beide views)
+          html += `
+          <div class="sectie-blok" style="margin-top: 12px; border-color: var(--border);">
+              <div class="sectie-header" style="background: #FAFAF8;">Eigen Notities</div>
+              <div style="padding: 8px 12px 12px 12px; background: #FFF;">
+                  <textarea class="note-textarea" placeholder="Typ hier je opmerkingen voor deze dag..." oninput="saveNote('${leider}', '${dag.date}', this.value)">${savedNote}</textarea>
+              </div>
+          </div>
+          `;
 
           // -- HTML Kaart Opbouwen --
           const card = document.createElement('div');
