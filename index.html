@@ -134,7 +134,7 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       gap: 6px;
     }
 
@@ -148,6 +148,39 @@
       font-size: 14px;
       color: var(--mid);
       font-weight: 500;
+    }
+
+    /* Weergave Toggle */
+    .view-toggle {
+      display: flex;
+      background: var(--card);
+      border-radius: 12px;
+      padding: 4px;
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+
+    .view-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: var(--mid);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .view-btn.active {
+      background: var(--bg);
+      color: var(--dark);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
     /* Statistieken Sectie (Groep Info) */
@@ -262,13 +295,18 @@
     .diensten-grid {
       display: flex;
       gap: 24px;
-      padding: 10px 12px;
+      padding: 0;
     }
+    
     .dienst-item {
       display: flex;
       flex-direction: column;
       gap: 4px;
+      padding: 10px 12px;
+      border-left: 4px solid transparent;
+      flex: 1;
     }
+
     .dienst-label {
       font-size: 10px;
       font-weight: 700;
@@ -284,10 +322,17 @@
       justify-content: space-between;
       padding: 10px 12px;
       border-bottom: 1px solid rgba(0,0,0,0.04);
+      border-left: 4px solid transparent;
       gap: 12px;
     }
 
     .kind-row:last-child { border-bottom: none; }
+
+    /* Highlight class voor Full Program weergave */
+    .highlight-task {
+      background-color: #FFF5F0 !important;
+      border-left: 4px solid var(--accent) !important;
+    }
 
     .kind-naam {
       font-size: 14px;
@@ -358,6 +403,7 @@
     .badge-groen { background: #E6F5ED; color: var(--green); }
     .badge-roze { background: var(--tag-f); color: var(--tag-f-text); }
     .badge-oranje { background: #FFF0EB; color: var(--accent); }
+    .badge-grijs { background: #E0E0E0; color: #777; }
 
     .ronde-badge {
       font-family: 'Syne', sans-serif;
@@ -392,6 +438,9 @@
     @media (max-width: 500px) {
       .kind-row { flex-direction: column; align-items: flex-start; }
       .kind-meta { width: 100%; justify-content: flex-start; margin-top: 6px; padding-left: 77px; }
+      .diensten-grid { flex-direction: column; gap: 0; }
+      .dienst-item { border-bottom: 1px solid rgba(0,0,0,0.04); }
+      .dienst-item:last-child { border-bottom: none; }
     }
   </style>
 </head>
@@ -408,7 +457,7 @@
   <div id="selectionScreen" class="controls">
     <div class="controls-title">Draaiboek Tool</div>
     <h2 class="results-title" style="margin-bottom: 6px;">Welke leider ben je?</h2>
-    <p class="results-meta">Selecteer je naam om je persoonlijke rooster te bekijken.</p>
+    <p class="results-meta">Selecteer je naam om je programma te bekijken.</p>
     <div class="btn-group" id="leaderGrid">
       <!-- Knoppen worden door JS gegenereerd -->
     </div>
@@ -418,7 +467,12 @@
   <div id="dayScreen" style="display: none;">
     <div class="results-header">
       <div class="results-title" id="welcomeText">Hallo!</div>
-      <div class="results-meta">Klik op een dag om je taken en spellen te bekijken.</div>
+    </div>
+
+    <!-- Toggle Persoonlijk vs Volledig -->
+    <div class="view-toggle">
+      <button id="btnViewPersonal" class="view-btn active" onclick="setViewMode('personal')">Mijn Rooster</button>
+      <button id="btnViewFull" class="view-btn" onclick="setViewMode('full')">Volledig Programma</button>
     </div>
 
     <!-- Groepsindeling (Bonte Avond) -->
@@ -435,7 +489,11 @@
 </div>
 
 <script>
-  // Data: Leiders
+  // State variables
+  let currentLeader = null;
+  let viewMode = 'personal'; // 'personal' of 'full'
+
+  // Data: Leiders[cite: 1]
   const leiders = [
       "Bastiaan", "Bjomi", "Charlotte", "Daphne", "Dion", 
       "Eddy", "Isa", "Kylie", "Lotte", "Mirjam", 
@@ -443,7 +501,7 @@
       "Yoni", "Yorick"
   ];
 
-  // Data: Bonte avond groepen
+  // Data: Bonte avond groepen[cite: 1, 2]
   const groepen = [
       { kleur: "Blauw", cssVar: "var(--groep-blauw)", leiders: ["Dion", "Bjomi", "Yoni"], kids: ["Anne", "Jelina", "Jens", "Jordi", "Rosalie", "Saar", "Susanne"] },
       { kleur: "Rood", cssVar: "var(--groep-rood)", leiders: ["Daphne", "Eddy", "Ed", "Thomas"], kids: ["Ava", "Matthijs", "Mette", "Nick", "Ralph", "Renée", "Ramses", "Sam vd P."] },
@@ -452,7 +510,7 @@
       { kleur: "Groen", cssVar: "var(--groep-groen)", leiders: ["Bastiaan", "Bas", "Wessel", "Kylie"], kids: ["Celeste", "Jonah", "Laura", "Luc", "Noëlle N.", "Semme", "Yasmine"] }
   ];
 
-  // Data: Volledig herzien schema inclusief de nieuwe Corvee structuur
+  // Data: Schema[cite: 1, 2]
   const schema = [
       {
           date: "2026-07-18",
@@ -615,6 +673,8 @@
   const groupSection = document.getElementById('groupSection');
   const daysList = document.getElementById('daysList');
   const leaderGrid = document.getElementById('leaderGrid');
+  const btnViewPersonal = document.getElementById('btnViewPersonal');
+  const btnViewFull = document.getElementById('btnViewFull');
 
   // Init App
   function initApp() {
@@ -632,19 +692,41 @@
       }
   }
 
+  // View Mode Schakelaar (Toggle)
+  function setViewMode(mode) {
+      viewMode = mode;
+      
+      // Update knoppen styling
+      if(mode === 'personal') {
+          btnViewPersonal.classList.add('active');
+          btnViewFull.classList.remove('active');
+      } else {
+          btnViewFull.classList.add('active');
+          btnViewPersonal.classList.remove('active');
+      }
+
+      // Herteken het rooster
+      if(currentLeader) {
+          renderDays(currentLeader);
+      }
+  }
+
   // Selecteer Leider
   function selectLeader(leider) {
+      currentLeader = leider;
       localStorage.setItem('kamp2_geselecteerde_leider', leider);
       screenSelect.style.display = 'none';
       screenDay.style.display = 'block';
       btnWissel.style.display = 'block';
       welcomeText.innerHTML = `Hallo <span style="color:var(--accent);">${leider}</span>!`;
+      
       renderGroup(leider);
-      renderDays(leider);
+      setViewMode('personal'); // Default naar personal view
   }
 
   // Terug naar selectie
   function wisselLeider() {
+      currentLeader = null;
       localStorage.removeItem('kamp2_geselecteerde_leider');
       screenSelect.style.display = 'block';
       screenDay.style.display = 'none';
@@ -688,7 +770,7 @@
       groupSection.appendChild(card);
   }
 
-  // Render Dagen Schema
+  // Render Dagen Schema (Personal OR Full mode)
   function renderDays(leider) {
       daysList.innerHTML = '';
       const todayStr = new Date().toISOString().split('T')[0];
@@ -696,126 +778,170 @@
       schema.forEach((dag, index) => {
           const isToday = (dag.date === todayStr);
 
-          // -- Data Verzamelen --
-          const heeftTafel = matchesLeader(leider, dag.tafeldienst);
-          const heeftNacht = matchesLeader(leider, dag.nachtdienst);
+          let html = '';
+          let isHelemaalLeeg = false;
 
-          const mijnCorvees = [];
-          dag.corvee.forEach(c => {
-              if (matchesLeader(leider, c.leiding) || c.leiding.includes('ALLEN')) {
-                  const partners = c.leiding.filter(p => !matchesLeader(leider, [p]) && p !== 'ALLEN');
-                  mijnCorvees.push({
-                      type: c.type,
-                      taak: c.taak,
-                      samenMet: partners,
-                      kids: c.kids
-                  });
+          // ==========================================
+          // MODUS 1: PERSOONLIJK ROOSTER
+          // ==========================================
+          if (viewMode === 'personal') {
+              const heeftTafel = matchesLeader(leider, dag.tafeldienst);
+              const heeftNacht = matchesLeader(leider, dag.nachtdienst);
+
+              const mijnCorvees = [];
+              dag.corvee.forEach(c => {
+                  if (matchesLeader(leider, c.leiding) || c.leiding.includes('ALLEN')) {
+                      const partners = c.leiding.filter(p => !matchesLeader(leider, [p]) && p !== 'ALLEN');
+                      mijnCorvees.push({
+                          type: c.type, taak: c.taak, samenMet: partners, kids: c.kids
+                      });
+                  }
+              });
+
+              const mijnSpellen = [];
+              dag.spellen.forEach(spel => {
+                  const mijnRolMatch = spel.rollen.find(r => matchesLeader(leider, r.wie) || r.wie.includes('ALLEN'));
+                  if (mijnRolMatch) {
+                      mijnSpellen.push({ 
+                          naam: spel.naam, dagdeel: spel.dagdeel, rol: mijnRolMatch.rol, 
+                          samenMet: mijnRolMatch.wie.filter(p => !matchesLeader(leider, [p]) && p !== 'ALLEN') 
+                      });
+                  }
+              });
+
+              isHelemaalLeeg = !heeftTafel && !heeftNacht && mijnCorvees.length === 0 && mijnSpellen.length === 0;
+
+              if (isHelemaalLeeg) {
+                  html += `<div class="leeg-state">Je moet helemaal niks!</div>`;
+              } else {
+                  // Diensten (Personal)
+                  if (heeftTafel || heeftNacht) {
+                      html += `<div class="sectie-blok sectie-diensten"><div class="diensten-grid">`;
+                      if (heeftTafel) {
+                          html += `
+                          <div class="dienst-item highlight-task">
+                              <span class="dienst-label">Tafeldienst</span>
+                              <div><span class="post-badge badge-groen">JA</span></div>
+                          </div>`;
+                      }
+                      if (heeftNacht) {
+                          html += `
+                          <div class="dienst-item highlight-task">
+                              <span class="dienst-label">Nachtdienst</span>
+                              <div><span class="post-badge badge-roze">JA</span></div>
+                          </div>`;
+                      }
+                      html += `</div></div>`;
+                  }
+
+                  // Corvee (Personal)
+                  if (mijnCorvees.length > 0) {
+                      html += `<div class="sectie-blok sectie-corvee"><div class="sectie-header">Corveerooster</div>`;
+                      mijnCorvees.forEach(c => {
+                          let partners = c.samenMet.length > 0 ? `Met: ${c.samenMet.join(', ')}` : 'Samen met de rest';
+                          let kidsTags = c.kids.map(k => `<span class="tag tag-${k.toLowerCase()}">${k}</span>`).join(' ');
+                          html += `
+                          <div class="kind-row highlight-task">
+                              <div class="row-content-wrapper">
+                                  <div class="badge-kolom"><span class="ronde-badge dagdeel">${c.type}</span></div>
+                                  <div class="kind-naam">${c.taak}<div class="sub-text">${partners}</div></div>
+                              </div>
+                              <div class="kind-meta">${kidsTags}</div>
+                          </div>`;
+                      });
+                      html += `</div>`;
+                  }
+
+                  // Spellen (Personal)
+                  if (mijnSpellen.length > 0) {
+                      html += `<div class="sectie-blok sectie-spellen"><div class="sectie-header">Spel Begeleiding & Rollen</div>`;
+                      mijnSpellen.forEach(s => {
+                          let partners = s.samenMet.length > 0 ? `Samen met: ${s.samenMet.join(', ')}` : 'Zelfstandig / Allen';
+                          let isActeur = s.rol.toLowerCase().includes('acteur') || s.rol.toLowerCase().includes('outfit');
+                          let rolBadge = isActeur ? 'badge-roze' : 'badge-oranje';
+                          html += `
+                          <div class="kind-row highlight-task">
+                              <div class="row-content-wrapper">
+                                  <div class="badge-kolom"><span class="ronde-badge dagdeel">${s.dagdeel}</span></div>
+                                  <div class="kind-naam">${s.naam}<div class="sub-text">${partners}</div></div>
+                              </div>
+                              <div class="kind-meta"><span class="post-badge ${rolBadge}">${s.rol}</span></div>
+                          </div>`;
+                      });
+                      html += `</div>`;
+                  }
               }
-          });
-
-          const mijnSpellen = [];
-          dag.spellen.forEach(spel => {
-              const mijnRolMatch = spel.rollen.find(r => matchesLeader(leider, r.wie) || r.wie.includes('ALLEN'));
-              if (mijnRolMatch) {
-                  mijnSpellen.push({ 
-                      naam: spel.naam, dagdeel: spel.dagdeel, rol: mijnRolMatch.rol, 
-                      samenMet: mijnRolMatch.wie.filter(p => !matchesLeader(leider, [p]) && p !== 'ALLEN') 
-                  });
-              }
-          });
-
-          // Check of leider HELEMAAL NIKS hoeft te doen vandaag
-          const isHelemaalLeeg = !heeftTafel && !heeftNacht && mijnCorvees.length === 0 && mijnSpellen.length === 0;
-
-          // -- HTML Opbouwen --
-          const card = document.createElement('div');
-          card.className = `group-card ${isToday ? 'highlight-day' : ''}`;
-          
-          let todayBadge = isToday ? `<span class="ronde-badge vandaag" style="margin-left:8px;">VANDAAG</span>` : '';
-          let iconState = isToday ? '▲' : '▼';
-
-          let html = `
-              <div class="group-header" onclick="toggleAccordion(${index})">
-                  <div class="group-name">${dag.name} ${todayBadge}</div>
-                  <div class="group-size" id="icon-${index}">${iconState}</div>
-              </div>
-              <div class="group-body" id="content-${index}" style="display: ${isToday ? 'block' : 'none'};">
-          `;
-
-          if (isHelemaalLeeg) {
-              html += `<div class="leeg-state">Je moet helemaal niks!</div>`;
-          } else {
+          } 
+          // ==========================================
+          // MODUS 2: VOLLEDIG PROGRAMMA
+          // ==========================================
+          else {
               
-              // 1. Algemene Diensten 
-              if (heeftTafel || heeftNacht) {
-                  html += `<div class="sectie-blok sectie-diensten"><div class="diensten-grid">`;
-                  
-                  if (heeftTafel) {
-                      html += `
-                      <div class="dienst-item">
-                          <span class="dienst-label">Tafeldienst</span>
-                          <div><span class="post-badge badge-groen">JA</span></div>
-                      </div>`;
-                  }
-                  
-                  if (heeftNacht) {
-                      html += `
-                      <div class="dienst-item">
-                          <span class="dienst-label">Nachtdienst</span>
-                          <div><span class="post-badge badge-roze">JA</span></div>
-                      </div>`;
-                  }
-                  
-                  html += `</div></div>`;
-              }
+              // Diensten (Full)
+              let tafeldienstNames = dag.tafeldienst.length > 0 ? dag.tafeldienst.join(', ') : 'Geen';
+              let isMijnTafel = matchesLeader(leider, dag.tafeldienst);
+              
+              let nachtdienstNames = dag.nachtdienst.length > 0 ? dag.nachtdienst.join(', ') : 'Geen';
+              let isMijnNacht = matchesLeader(leider, dag.nachtdienst);
 
-              // 2. Corvee
-              if (mijnCorvees.length > 0) {
-                  html += `<div class="sectie-blok sectie-corvee"><div class="sectie-header">Corveerooster</div>`;
-                  mijnCorvees.forEach(c => {
-                      let partners = c.samenMet.length > 0 ? `Met: ${c.samenMet.join(', ')}` : 'Samen met de rest';
-                      let kidsTags = c.kids.map(k => `<span class="tag tag-${k.toLowerCase()}">${k}</span>`).join(' ');
+              html += `<div class="sectie-blok sectie-diensten"><div class="diensten-grid">`;
+              html += `
+                  <div class="dienst-item ${isMijnTafel ? 'highlight-task' : ''}">
+                      <span class="dienst-label">Tafeldienst</span>
+                      <div style="font-size: 13px; font-weight: 600; color: var(--dark);">${tafeldienstNames}</div>
+                  </div>`;
+              html += `
+                  <div class="dienst-item ${isMijnNacht ? 'highlight-task' : ''}">
+                      <span class="dienst-label">Nachtdienst</span>
+                      <div style="font-size: 13px; font-weight: 600; color: var(--dark);">${nachtdienstNames}</div>
+                  </div>`;
+              html += `</div></div>`;
+
+              // Corvee (Full)
+              if (dag.corvee.length > 0) {
+                  html += `<div class="sectie-blok sectie-corvee"><div class="sectie-header">Corveerooster (Iedereen)</div>`;
+                  dag.corvee.forEach(c => {
+                      let isMijnCorvee = c.leiding.some(l => matchesLeader(leider, [l]) || l === 'ALLEN');
+                      let kidsTags = c.kids.length > 0 
+                          ? c.kids.map(k => `<span class="tag tag-${k.toLowerCase()}">${k}</span>`).join(' ') 
+                          : '<span class="tag badge-grijs">Geen</span>';
                       
                       html += `
-                      <div class="kind-row">
+                      <div class="kind-row ${isMijnCorvee ? 'highlight-task' : ''}">
                           <div class="row-content-wrapper">
-                              <div class="badge-kolom">
-                                  <span class="ronde-badge dagdeel">${c.type}</span>
-                              </div>
+                              <div class="badge-kolom"><span class="ronde-badge dagdeel">${c.type}</span></div>
                               <div class="kind-naam">
                                   ${c.taak}
-                                  <div class="sub-text">${partners}</div>
+                                  <div class="sub-text">Leiding: <span style="color:var(--dark); font-weight:600;">${c.leiding.join(', ')}</span></div>
                               </div>
                           </div>
-                          <div class="kind-meta">
-                              ${kidsTags}
-                          </div>
+                          <div class="kind-meta">${kidsTags}</div>
                       </div>`;
                   });
                   html += `</div>`;
               }
 
-              // 3. Spellen
-              if (mijnSpellen.length > 0) {
-                  html += `<div class="sectie-blok sectie-spellen"><div class="sectie-header">Spel Begeleiding & Rollen</div>`;
-                  mijnSpellen.forEach(s => {
-                      let partners = s.samenMet.length > 0 ? `Samen met: ${s.samenMet.join(', ')}` : 'Zelfstandig / Allen';
-                      let isActeur = s.rol.toLowerCase().includes('acteur') || s.rol.toLowerCase().includes('outfit');
-                      let rolBadge = isActeur ? 'badge-roze' : 'badge-oranje';
+              // Spellen (Full)
+              if (dag.spellen.length > 0) {
+                  html += `<div class="sectie-blok sectie-spellen"><div class="sectie-header">Programma & Rollen (Iedereen)</div>`;
+                  dag.spellen.forEach(s => {
+                      let isMijnSpel = s.rollen.some(r => r.wie.some(w => matchesLeader(leider, [w]) || w === 'ALLEN'));
                       
+                      let rollenHtml = s.rollen.map(r => {
+                          let isMijnRol = r.wie.some(w => matchesLeader(leider, [w]) || w === 'ALLEN');
+                          let startMark = isMijnRol ? `<span style="color:var(--accent); font-weight:700;">` : `<span style="color:var(--dark); font-weight:600;">`;
+                          let endMark = `</span>`;
+                          return `• ${r.rol}: ${startMark}${r.wie.join(', ')}${endMark}`;
+                      }).join('<br>');
+
                       html += `
-                      <div class="kind-row">
+                      <div class="kind-row ${isMijnSpel ? 'highlight-task' : ''}">
                           <div class="row-content-wrapper">
-                              <div class="badge-kolom">
-                                  <span class="ronde-badge dagdeel">${s.dagdeel}</span>
-                              </div>
+                              <div class="badge-kolom"><span class="ronde-badge dagdeel">${s.dagdeel}</span></div>
                               <div class="kind-naam">
                                   ${s.naam}
-                                  <div class="sub-text">${partners}</div>
+                                  <div class="sub-text" style="margin-top: 6px; line-height: 1.6;">${rollenHtml}</div>
                               </div>
-                          </div>
-                          <div class="kind-meta">
-                              <span class="post-badge ${rolBadge}">${s.rol}</span>
                           </div>
                       </div>`;
                   });
@@ -823,8 +949,23 @@
               }
           }
 
-          html += `</div>`; // Sluit group-body
-          card.innerHTML = html;
+          // -- HTML Kaart Opbouwen --
+          const card = document.createElement('div');
+          card.className = `group-card ${isToday ? 'highlight-day' : ''}`;
+          
+          let todayBadge = isToday ? `<span class="ronde-badge vandaag" style="margin-left:8px;">VANDAAG</span>` : '';
+          let iconState = isToday ? '▲' : '▼';
+
+          card.innerHTML = `
+              <div class="group-header" onclick="toggleAccordion(${index})">
+                  <div class="group-name">${dag.name} ${todayBadge}</div>
+                  <div class="group-size" id="icon-${index}">${iconState}</div>
+              </div>
+              <div class="group-body" id="content-${index}" style="display: ${isToday ? 'block' : 'none'};">
+                  ${html}
+              </div>
+          `;
+          
           daysList.appendChild(card);
       });
   }
